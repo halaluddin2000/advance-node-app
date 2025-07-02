@@ -1,28 +1,10 @@
 import express, { Application, Request, Response } from "express";
-import { model, Schema } from "mongoose";
+import { noteRoutes } from "./colleberation/note.collebaration";
 
 const app: Application = express();
+app.use(express.json());
 
-const noteSchema = new Schema({
-  title: String,
-  content: String,
-});
-
-const Note = model("Note", noteSchema);
-
-app.post("/create-note", async (req: Request, res: Response) => {
-  const myNote = new Note({
-    title: "Learning Mongoose",
-    content: "advence note app",
-  });
-  await myNote.save();
-
-  res.status(201).json({
-    success: true,
-    massage: "Note created successfuly",
-    node: myNote,
-  });
-});
+app.use("/notes", noteRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("welcome to note app");
