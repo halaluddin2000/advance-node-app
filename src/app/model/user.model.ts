@@ -6,11 +6,19 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
     trim: true,
+    minlength: 5,
+    maxlength: 10,
   },
   lastName: {
     type: String,
     required: true,
     trim: true,
+  },
+  age: {
+    type: Number,
+    required: true,
+    min: 18,
+    max: 60,
   },
   email: {
     type: String,
@@ -18,6 +26,10 @@ const userSchema = new Schema<IUser>({
     unique: true,
     uppercase: true,
     trim: true,
+  },
+  password: {
+    type: String,
+    required: true,
   },
   role: {
     type: String,
