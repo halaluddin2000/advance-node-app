@@ -1,4 +1,8 @@
-// export interface IAddress {}
+export interface IAddress {
+  country: string;
+  city: string;
+  zip: number;
+}
 
 export interface IUser {
   firstName: string;
@@ -7,5 +11,5 @@ export interface IUser {
   email: string;
   password: string;
   role: "user" | "admin";
-  address: { country: string; city: string; zip: number };
+  address: IAddress;
 }

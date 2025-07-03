@@ -1,12 +1,15 @@
 import { model, Schema } from "mongoose";
-import { IUser } from "../interface/user.interface";
+import { IAddress, IUser } from "../interface/user.interface";
 import validator from "validator";
 
-// const addressSchema = new Schema<IAddress>({
-//   country: { type: String },
-//   city: { type: String },
-//   zip: { type: Number },
-// });
+const addressSchema = new Schema<IAddress>(
+  {
+    country: { type: String },
+    city: { type: String },
+    zip: { type: Number },
+  },
+  { _id: false }
+);
 
 const userSchema = new Schema<IUser>({
   firstName: {
@@ -44,9 +47,7 @@ const userSchema = new Schema<IUser>({
     default: "user",
   },
   address: {
-    country: { type: String },
-    city: { type: String },
-    zip: { type: Number },
+    type: addressSchema,
   },
 });
 
