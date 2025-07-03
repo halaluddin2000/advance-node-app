@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
-import { IUser } from "../colleberation/user.controller";
+import { IUser } from "../interface/user.interface";
+import validator from "validator";
 
 const userSchema = new Schema<IUser>({
   firstName: {
@@ -24,8 +25,9 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
     unique: true,
-    uppercase: true,
+    lowercase: true,
     trim: true,
+    validate: [validator.isEmail, "Invalit email send {VALUE}"],
   },
   password: {
     type: String,
