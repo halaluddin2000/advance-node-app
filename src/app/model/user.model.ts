@@ -2,6 +2,12 @@ import { model, Schema } from "mongoose";
 import { IUser } from "../interface/user.interface";
 import validator from "validator";
 
+// const addressSchema = new Schema<IAddress>({
+//   country: { type: String },
+//   city: { type: String },
+//   zip: { type: Number },
+// });
+
 const userSchema = new Schema<IUser>({
   firstName: {
     type: String,
@@ -36,6 +42,11 @@ const userSchema = new Schema<IUser>({
   role: {
     type: String,
     default: "user",
+  },
+  address: {
+    country: { type: String },
+    city: { type: String },
+    zip: { type: Number },
   },
 });
 

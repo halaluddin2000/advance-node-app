@@ -16,20 +16,20 @@ const CrateUserValidation = z.object({
 
 userRoutes.post("/create-user", async (req: Request, res: Response) => {
   try {
-    const body = await CrateUserValidation.parseAsync(req.body);
-    console.log(body, "Zod body");
+    const body = req.body;
+    // const body = await CrateUserValidation.parseAsync(req.body);
 
     const user = await User.create(body);
     res.status(201).json({
       success: true,
       massage: "user crated successfully",
-      user: {},
+      user: user,
     });
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
       success: false,
-      massage: error.massage,
+      message: error.message,
       error,
     });
   }
@@ -73,7 +73,7 @@ userRoutes.patch("/:userId", async (req: Request, res: Response) => {
 userRoutes.delete("/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
   const updateBody = req.body;
-  const user = await User.findByIdAndDelete(userId, updateBody);
+  const user = await User.findByIdAndDelete(userId);
 
   res.status(201).json({
     success: true,
