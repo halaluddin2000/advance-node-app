@@ -1,6 +1,13 @@
-import { model, Schema } from "mongoose";
-import { IAddress, IUser } from "../interface/user.interface";
+import { Model, model, Schema } from "mongoose";
+import {
+  IAddress,
+  IUser,
+  UserInstantMethods,
+  UserStaticMethods,
+} from "../interface/user.interface";
 import validator from "validator";
+import bcrypt from "bcryptjs";
+import { Note } from "./note.model";
 
 const addressSchema = new Schema<IAddress>(
   {
@@ -11,7 +18,7 @@ const addressSchema = new Schema<IAddress>(
   { _id: false }
 );
 
-const userSchema = new Schema<IUser>(
+const userSchema = new Schema<IUser, Model<IUser>, UserInstantMethods>(
   {
     firstName: {
       type: String,
@@ -56,5 +63,42 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
   }
 );
+userSchema.method("hashPassword", async function (planPassword: string) {
+  const password = await bcrypt.hash(planPassword, 10);
+  return password;
+});
 
-export const User = model("User", userSchema);
+userSchema.static("hashPassword", async function (planPassword: string) {
+  const password = await bcrypt.hash(planPassword, 10);
+  return password;
+});
+
+//pre Hooks
+
+//Document Middleware
+
+userSchema.pre("save", async function () {
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+//Query Middleware
+
+userSchema.pre("find", function (doc) {
+  console.log(doc);
+});
+
+//Post Hook
+
+//Document Middleware
+userSchema.post("save", function (doc) {
+  console.log(`%email has been saved`, doc.email);
+});
+//Query Middleware
+userSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    console.log(doc);
+    await Note.deleteMany({ user: doc._id });
+  }
+});
+
+export const User = model<IUser, UserStaticMethods>("User", userSchema);

@@ -17,6 +17,11 @@ const noteSchema = new Schema<Inotes>({
     label: { type: String, required: true },
     color: { type: String, default: "gray" },
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 export const Note = model("Note", noteSchema);

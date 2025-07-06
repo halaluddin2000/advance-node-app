@@ -2,6 +2,7 @@
 import express, { Request, Response } from "express";
 import { User } from "../model/user.model";
 import z, { string } from "zod";
+import bcrypt from "bcryptjs";
 
 export const userRoutes = express.Router();
 
@@ -17,9 +18,24 @@ const CrateUserValidation = z.object({
 userRoutes.post("/create-user", async (req: Request, res: Response) => {
   try {
     const body = req.body;
+
+    //----built in instant methods
+    // const user = new User(body);
+    // const password = await user.hashPassword(body.password);
+    // console.log(password);
+    // user.password = password;
+
+    // await user.save();
+
+    //----built in static methods
+    // const password = await User.hashPassword(body.password);
+    // console.log(password, "static");
+    // body.password = password;
+
     // const body = await CrateUserValidation.parseAsync(req.body);
 
     const user = await User.create(body);
+
     res.status(201).json({
       success: true,
       massage: "user crated successfully",
@@ -73,7 +89,8 @@ userRoutes.patch("/:userId", async (req: Request, res: Response) => {
 userRoutes.delete("/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
   const updateBody = req.body;
-  const user = await User.findByIdAndDelete(userId);
+  // const user = await User.findByIdAndDelete(userId);
+  const user = await User.findOneAndDelete({ _id: userId });
 
   res.status(201).json({
     success: true,

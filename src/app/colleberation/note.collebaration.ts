@@ -6,6 +6,7 @@ export const noteRoutes = express.Router();
 
 noteRoutes.post("/create-note", async (req: Request, res: Response) => {
   const body = req.body;
+
   //noteRoutesroach-1
   // const myNote = new Note({
   //   title: "Learning Mongoose",
@@ -26,7 +27,7 @@ noteRoutes.post("/create-note", async (req: Request, res: Response) => {
 });
 //find all data-----------------
 noteRoutes.get("/", async (req: Request, res: Response) => {
-  const notes = await Note.find();
+  const notes = await Note.find().populate("user");
 
   res.status(201).json({
     success: true,
